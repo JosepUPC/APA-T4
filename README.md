@@ -144,17 +144,112 @@ a ejecutar con la biblioteca `doctest`:
 - El fichero debe incluir una cadena de documentación que incluirá el nombre del alumno
   y una descripción el contenido del fichero.
 
+```python
+'''
+0. Nombre y Apellido
+
+Josep Esquerrà Bayo
+
+1. Descripción
+
+Este documnento contiene una clase para la generación de números aleatorios usando el algoritmo LGC.
+Dentro de la clase se pueden apreciar unas funciones de clase que generan los números alratorios usando la clase.
+Ademas, dicha clase continen un función para poder generar numeros aleatorios.
+Finalmente, se ha añadido unos test en la cadena de texto con la función verbosa.
+'''
+```
+
 - La cadena de documentación de la clase `Aleat` debeá incluir:
 
   - Una descripción del cometido de la clase.
   - Una descripción de los atributos y métodos de la clase.
   - Las pruebas unitarias correspondientes.
 
+```python
+'''
+2. Clase Aleat
+
+    -Contenido
+
+Conjunto de métodos para definir una variable como un objeto y una funcion que poder ejecutar directamente
+
+    -Métodos
+
+método init() por default de la clase junto con atributos definidios con variables fijas (a, c, m, x0)
+método next() para poder iterar el siguiente objeto de la clase
+método call() para poder modificar la variable x y modificar la aletoriedad del valor de salida
+
+    -Pruebas unitarias de Aleat
+
+        Comprobación del funcionamiento de Aleat
+
+>>> rand = Aleat(m=32, a=9, c=13, x0=11)
+>>> for _ in range(4):
+...     print(next(rand))
+...
+16
+29
+18
+15
+
+        Comprobación del reinicio de Aleat
+
+>>> rand(29)
+>>> for _ in range(4):
+...     print(next(rand))
+...
+18
+15
+20
+1
+'''
+```
+
 - La cadena de documentación de la función generadora `aleat()` deberá incluir:
 
   - Una descripción del cometido de la función.
   - Los argumentos de la función y la salida proporcionada.
   - Las pruebas unitarias correspondientes.
+
+```python
+'''
+3. funcion aleat
+
+    -Contenido
+
+funcion que da un valor aleatorio por cada iteracion que se la de. Puede usarse la funcion send para poder variar la variable de entrada x
+
+    -I/O
+
+Mismas variables de inicio que en la función __init__(), función yield para pausar el bucle i tener un valor por cada llamada de al función. Comprovación si és que reciven un valor de entrada
+
+    -Pruebas unitarias de aleat()
+
+        Comprobación del funcionamiento de aleat()
+
+>>> rand = aleat(m=64, a=5, c=46, x0=36)
+>>> for _ in range(4):
+...     print(next(rand))
+...
+34
+24
+38
+44
+
+        Comprobación del reinicio de aleat()
+
+>>> rand.send(24)
+38
+>>> for _ in range(4):
+...     print(next(rand))
+...
+44
+10
+32
+14
+
+'''
+```
 
 - Se valorará lo pythónico de la solución; en concreto, su claridad y sencillez, y el
   uso de los estándares marcados por PEP-ocho.
@@ -165,11 +260,46 @@ Inserte a continuación una captura de pantalla que muestre el resultado de ejec
 fichero `aleatorios.py` con la opción *verbosa*, de manera que se muestre el
 resultado de la ejecución de los tests unitarios.
 
+![](picture1.png)
+![](picture2.png)
+![](picture3.png)
+![](picture4.png)
+
 #### Código desarrollado
 
 Inserte a continuación el código de los métodos desarrollados en esta tarea, usando los
 comandos necesarios para que se realice el realce sintáctico en Python del mismo (no
 vale insertar una imagen o una captura de pantalla, debe hacerse en formato *markdown*).
+
+```python
+# Class Aleat
+class Aleat:
+    def __init__(self, *, m=2**31, a=1103515245, c=12345, x0=1212121):
+        self.m = m
+        self.a = a
+        self.c = c
+        self.x = x0
+
+    def __next__(self):
+        self.x = (self.a * self.x + self.c) % self.m
+        return self.x
+    
+    def __call__(self, value):
+        self.x = value
+
+# Funció generadora
+def aleat(*, m=2**31, a=1103515245, c=12345, x0=1212121):
+    x = x0
+    while True:
+        rebut = (yield x)
+        if rebut is not None:
+            x = rebut
+        x = (a * x + c) % m
+
+if __name__=="__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+```
 
 #### Subida del resultado al repositorio GitHub y *pull-request*
 
